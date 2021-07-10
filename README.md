@@ -11,7 +11,8 @@ A small library for logging in the C programming language. Features include:
 ###### With Premake
 
 Clone the repository to the location of your choice.
-Create a new premake project and include the file `c_log/premake5.lua` inside your own premake file.
+Create a new premake workspace and include the file `c_log/premake5.lua` inside your own premake file. 
+Then link your project to the c_log project using this line `links "c_log"`.
 For a full setup of premake go to the premake [github page](https://github.com/premake/premake-core).
 
 ###### Without Premake

@@ -15,7 +15,7 @@ void _cl_logger_log(CL_Logger *logger, uint32_t lvl, const char *file, uint32_t 
 			{
 				_CL_LOG_COLOR_SET(lvl);
 			}
-			_cl_vflog(logger->outputs[i], lvl, file, line, format, va_args);
+			_cl_vflog(logger->outputs[i], lvl, logger->name, file, line, format, va_args);
 			if(logger->output_colors[i])
 			{
 				_CL_LOG_COLOR_RESET();
@@ -42,9 +42,9 @@ void _cl_flog(CL_Logger *logger, FILE *output, uint32_t lvl, const char *file, u
 	va_end(va_args);
 }*/
 
-void _cl_vflog(FILE *output, uint32_t lvl, const char *file, uint32_t line, const char *format, va_list va_args)
+void _cl_vflog(FILE *output, uint32_t lvl, const char *logger_name, const char *file, uint32_t line, const char *format, va_list va_args)
 {
-	fprintf(output, "[%s] ", g_cl_info->time.string);
+	fprintf(output, "[%s] (%s) ", g_cl_info->time.string, logger_name);
 	fprintf(output, "%s", g_cl_info->log_level_names[lvl]);
 	fprintf(output, " \t%s:%d\t", file, line);
 	vfprintf(output, format, va_args);

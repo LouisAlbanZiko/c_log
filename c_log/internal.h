@@ -68,7 +68,7 @@ typedef struct _CL_Logger
 
 //void _cl_vlog(CL_Logger *logger, uint32_t lvl, const char *file, uint32_t line,  const char *format, va_list va_args);
 //void _cl_flog(CL_Logger *logger, FILE *output, uint32_t lvl, const char *file, uint32_t line, const char *format, ...);
-void _cl_vflog(FILE *output, uint32_t lvl, const char *file, uint32_t line, const char *format, va_list va_args);
+void _cl_vflog(FILE *output, uint32_t lvl, const char *logger_name, const char *file, uint32_t line, const char *format, va_list va_args);
 
 typedef struct _CL_GlobalInfo
 {

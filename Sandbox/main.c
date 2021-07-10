@@ -5,16 +5,14 @@
 //#define CL_LOG_DISABLED
 #include <c_log.h>
 
-
-
 int main(int argc, char **argv)
 {
 	CL_INIT();
 
-	CL_Logger *logger = CL_LOGGER_CREATE(1, "DEFAULT");
+	CL_Logger *logger = CL_LOGGER_CREATE(1, "LOGGER", "[%T] (%N) %% %C%V\t%F, %L %M%C");
 	CL_LOGGER_OUTPUT_ADD(logger, stdout, CL_COLOR_ENABLED);
 
-	CL_Logger *logger2 = CL_LOGGER_CREATE(1, "LOGGER2");
+	CL_Logger *logger2 = CL_LOGGER_CREATE(1, "LOGGER2", NULL);
 	CL_LOGGER_OUTPUT_ADD(logger2, stdout, CL_COLOR_DISABLED);
 
 	CL_LOG_TRACE(logger, "Hello World! %d", rand());
@@ -30,6 +28,7 @@ int main(int argc, char **argv)
 	CL_LOG_FATAL(logger2, "Hello World! %d", rand());
 
 	CL_LOGGER_DESTROY(logger);
+	CL_LOGGER_DESTROY(logger2);
 
 	CL_TERMINATE();
 }

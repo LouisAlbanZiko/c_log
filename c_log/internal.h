@@ -53,6 +53,31 @@ typedef struct _CL_TimeInfo
 #define _CL_LOG_COLOR_RESET()
 #endif
 
+// --- --- //
+
+// --- Pattern --- //
+
+enum CL_SegmentType
+{
+	CL_SEGMENT_TYPE_FILE = 0,
+	CL_SEGMENT_TYPE_LINE,
+	CL_SEGMENT_TYPE_LOG_LEVEL,
+	CL_SEGMENT_TYPE_TIME,
+	CL_SEGMENT_TYPE_MESSAGE,
+	CL_SEGMENT_TYPE_NAME,
+	CL_SEGMENT_TYPE_COLOR,
+	CL_SEGMENT_TYPE_STRING,
+	CL_SEGMENT_TYPE_COUNT
+};
+
+typedef struct _CL_Pattern
+{
+	const char *string;
+	uint32_t segment_count_c;
+	uint32_t segment_count_m;
+	uint8_t *segment_types;
+	char **segment_values;
+} CL_Pattern;
 
 // --- --- //
 
@@ -64,11 +89,8 @@ typedef struct _CL_Logger
 	uint8_t *output_colors;
 	FILE **outputs;
 	const char *name;
+	CL_Pattern pattern;
 } CL_Logger;
-
-//void _cl_vlog(CL_Logger *logger, uint32_t lvl, const char *file, uint32_t line,  const char *format, va_list va_args);
-//void _cl_flog(CL_Logger *logger, FILE *output, uint32_t lvl, const char *file, uint32_t line, const char *format, ...);
-void _cl_vflog(FILE *output, uint32_t lvl, const char *logger_name, const char *file, uint32_t line, const char *format, va_list va_args);
 
 typedef struct _CL_GlobalInfo
 {
@@ -76,6 +98,7 @@ typedef struct _CL_GlobalInfo
 	const char *color[CL_LOG_LEVEL_COUNT + 1];
 	const char *log_level_names[CL_LOG_LEVEL_COUNT];
 	CL_Logger default_logger;
+	const char *default_pattern;
 } CL_GlobalInfo;
 
 #endif

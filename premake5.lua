@@ -16,7 +16,7 @@ workspace "Sandbox"
 		files { "Sandbox/**.c" }
 		includedirs { "_vendor", "Sandbox" }
 
-		includedirs { "src" }
+		includedirs { "c_log" }
 		links { "c_log" }
 
-	include "src"
+	include "c_log"

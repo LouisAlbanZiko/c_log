@@ -2,7 +2,9 @@
 #include <stdint.h>
 #include <stdio.h>
 
+//#define CL_LOG_DISABLED
 #include <c_log.h>
+
 
 
 int main(int argc, char **argv)

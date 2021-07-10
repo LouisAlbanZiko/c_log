@@ -27,10 +27,25 @@ enum CL_ColorEnabled
 };
 
 #ifdef CL_LOG_DISABLED
+
 #define CL_LOG(logger, level, ...)
+
+#define CL_LOG_TRACE(logger, ...)
+#define CL_LOG_INFO(logger, ...)
+#define CL_LOG_WARN(logger, ...)
+#define CL_LOG_ERROR(logger, ...)
+#define CL_LOG_FATAL(logger, ...)
+
+#define CL_LOGGER_CREATE(output_count, name) NULL
+#define CL_LOGGER_OUTPUT_ADD(logger, file, colors_enabled)
+#define CL_LOGGER_DESTROY(logger)
+
+#define CL_INIT()
+#define CL_TERMINATE()
+
 #else
+
 #define CL_LOG(logger, level, ...) _cl_logger_log(logger, level, __FILE__, __LINE__, __VA_ARGS__)
-#endif
 
 #define CL_LOG_TRACE(logger, ...) CL_LOG(logger, CL_LOG_LEVEL_TRACE, __VA_ARGS__)
 #define CL_LOG_INFO(logger, ...) CL_LOG(logger, CL_LOG_LEVEL_INFO, __VA_ARGS__)
@@ -44,6 +59,9 @@ enum CL_ColorEnabled
 
 #define CL_INIT() _cl_init()
 #define CL_TERMINATE() _cl_terminate()
+
+#endif
+
 
 void _cl_init();
 void _cl_terminate();

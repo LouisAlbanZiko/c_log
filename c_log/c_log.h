@@ -10,6 +10,10 @@
 
 typedef struct _CL_Logger CL_Logger;
 
+#ifndef CL_DEFAULT_PATTERN
+	#define CL_DEFAULT_PATTERN "[%T] (%N) %C%V\t%F, %L %M%C"
+#endif
+
 enum CL_LogLevel
 {
 	CL_LOG_LEVEL_FATAL = 0,

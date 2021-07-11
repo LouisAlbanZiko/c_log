@@ -81,9 +81,13 @@ CL_Logger *_cl_logger_create(uint16_t ouput_count, const char *name, const char 
 	CL_Logger *logger = (CL_Logger *)malloc(sizeof(*logger));
 	logger->log_level = CL_LOG_LEVEL_TRACE;
 	logger->output_count_c = 0;
+	if(ouput_count == 0)
+		ouput_count = 2;
 	logger->output_count_m = ouput_count;
 	logger->outputs = malloc(sizeof(*logger->outputs) * ouput_count);
 	logger->output_colors = malloc(sizeof(*logger->output_colors) * ouput_count);
+	if(name == NULL)
+		name = "UNNAMED";
 	logger->name = name;
 
 	//LOG_INFO("Logger %s initialized succesfully.", name);
@@ -200,6 +204,12 @@ CL_Logger *_cl_logger_create(uint16_t ouput_count, const char *name, const char 
 
 void _cl_logger_output_add(CL_Logger *logger, FILE *file, uint8_t color_output)
 {
+	if(logger->output_count_c == logger->output_count_m)
+	{
+		logger->output_count_m *= 2;
+		logger->outputs = realloc(logger->outputs, sizeof(*logger->outputs) *  logger->output_count_m);
+		logger->output_colors = realloc(logger->output_colors, sizeof(*logger->output_colors) *  logger->output_count_m);
+	}
 	logger->outputs[logger->output_count_c] = file;
 	logger->output_colors[logger->output_count_c] = color_output;
 	logger->output_count_c++;
@@ -233,7 +243,7 @@ void _cl_init()
 	g_cl_info->log_level_names[CL_LOG_LEVEL_WARN] = "WARN ";
 	g_cl_info->log_level_names[CL_LOG_LEVEL_ERROR] = "ERROR";
 	g_cl_info->log_level_names[CL_LOG_LEVEL_FATAL] = "FATAL";
-	g_cl_info->default_pattern = "[%T] (%N) %C%V\t%F, %L %M%C";
+	g_cl_info->default_pattern = CL_DEFAULT_PATTERN;
 }
 
 void _cl_terminate()

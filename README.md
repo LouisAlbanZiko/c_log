@@ -21,4 +21,4 @@ Copy the files `c_log/c_log.c`, `c_log/c_log.h` and `c_log/internal.h` into your
 
 #### Documentation
 
-Wiki to be updated(WIP).
+Check the wiki page.

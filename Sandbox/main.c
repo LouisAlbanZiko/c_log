@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
+//#define CL_DEFAULT_PATTERN "%C%V\t%F, %L %M%C"
 //#define CL_LOG_DISABLED
 #include <c_log.h>
 

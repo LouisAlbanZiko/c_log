@@ -61,7 +61,7 @@ enum CL_ColorEnabled
 #define CL_LOGGER_OUTPUT_ADD(logger, file, colors_enabled) _cl_logger_output_add(logger, file, colors_enabled)
 #define CL_LOGGER_DESTROY(logger) _cl_logger_destroy(logger)
 
-#define CL_INIT() _cl_init()
+#define CL_INIT() _cl_init(CL_DEFAULT_PATTERN)
 #define CL_TERMINATE() _cl_terminate()
 
 #endif

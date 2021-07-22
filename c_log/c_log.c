@@ -229,7 +229,7 @@ void _cl_logger_destroy(CL_Logger *logger)
 	free(logger);
 }
 
-void _cl_init()
+void _cl_init(const char *default_pattern)
 {
 	g_cl_info = malloc(sizeof(*g_cl_info));
 	g_cl_info->color[CL_LOG_LEVEL_TRACE] = "\e[38;5;248m";
@@ -243,7 +243,7 @@ void _cl_init()
 	g_cl_info->log_level_names[CL_LOG_LEVEL_WARN] = "WARN ";
 	g_cl_info->log_level_names[CL_LOG_LEVEL_ERROR] = "ERROR";
 	g_cl_info->log_level_names[CL_LOG_LEVEL_FATAL] = "FATAL";
-	g_cl_info->default_pattern = CL_DEFAULT_PATTERN;
+	g_cl_info->default_pattern = default_pattern;
 }
 
 void _cl_terminate()

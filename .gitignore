@@ -1,0 +1,4 @@
+_bin/
+_bin_obj/
+*.sh
+*Makefile*

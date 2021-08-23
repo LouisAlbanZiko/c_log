@@ -55,7 +55,7 @@ enum CL_ColorEnabled
 #define CL_LOG_INFO(logger, ...) CL_LOG(logger, CL_LOG_LEVEL_INFO, __VA_ARGS__)
 #define CL_LOG_WARN(logger, ...) CL_LOG(logger, CL_LOG_LEVEL_WARN, __VA_ARGS__)
 #define CL_LOG_ERROR(logger, ...) CL_LOG(logger, CL_LOG_LEVEL_ERROR, __VA_ARGS__)
-#define CL_LOG_FATAL(logger, ...) CL_LOG(logger, CL_LOG_LEVEL_FATAL, __VA_ARGS__)
+#define CL_LOG_FATAL(logger, ...) CL_LOG(logger, CL_LOG_LEVEL_FATAL, __VA_ARGS__); exit(EXIT_FAILURE)
 
 #define CL_LOGGER_CREATE(output_count, name, pattern) _cl_logger_create(output_count, name, pattern)
 #define CL_LOGGER_OUTPUT_ADD(logger, file, colors_enabled) _cl_logger_output_add(logger, file, colors_enabled)

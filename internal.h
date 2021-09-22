@@ -6,7 +6,7 @@
 typedef struct _CL_TimeInfo CL_TimeInfo;
 typedef struct _CL_GlobalInfo CL_GlobalInfo;
 
-extern CL_GlobalInfo *g_cl_info;
+extern CL_GlobalInfo g_cl_info;
 
 // --- Time --- //
 
@@ -20,11 +20,11 @@ typedef struct _CL_TimeInfo
 	char string[10];
 } CL_TimeInfo;
 
-#define _CL_LOG_UPDATE_TIME()                               \
-	gettimeofday(&g_cl_info->time.tv, NULL);                \
-	g_cl_info->time.t = g_cl_info->time.tv.tv_sec;          \
-	localtime_r(&g_cl_info->time.t, &g_cl_info->time.info); \
-	strftime(g_cl_info->time.string, sizeof(g_cl_info->time.string), "%H:%M:%S", &g_cl_info->time.info);
+#define _CL_LOG_UPDATE_TIME()                             \
+	gettimeofday(&g_cl_info.time.tv, NULL);               \
+	g_cl_info.time.t = g_cl_info.time.tv.tv_sec;          \
+	localtime_r(&g_cl_info.time.t, &g_cl_info.time.info); \
+	strftime(g_cl_info.time.string, sizeof(g_cl_info.time.string), "%H:%M:%S", &g_cl_info.time.info);
 
 #elif defined _WIN32 || defined WIN32
 #include <Windows.h>
@@ -36,9 +36,9 @@ typedef struct _CL_TimeInfo
 	char string[10];
 } CL_TimeInfo;
 
-#define _CL_LOG_UPDATE_TIME()             \
-	GetSystemTime(&g_cl_info->time.info); \
-	GetTimeFormatA(LOCALE_USER_DEFAULT, TIME_FORCE24HOURFORMAT, &g_cl_info->time.info, NULL, g_cl_info->time.string, sizeof(g_cl_info->time.string));
+#define _CL_LOG_UPDATE_TIME()            \
+	GetSystemTime(&g_cl_info.time.info); \
+	GetTimeFormatA(LOCALE_USER_DEFAULT, TIME_FORCE24HOURFORMAT, &g_cl_info.time.info, NULL, g_cl_info.time.string, sizeof(g_cl_info.time.string));
 
 #endif
 // --- --- //
@@ -46,7 +46,7 @@ typedef struct _CL_TimeInfo
 // --- Color --- //
 
 #ifdef __unix__
-#define _CL_LOG_COLOR_SET(lvl) fprintf(stdout, "%s", g_cl_info->color[lvl])
+#define _CL_LOG_COLOR_SET(lvl) fprintf(stdout, "%s", g_cl_info.color[lvl])
 #define _CL_LOG_COLOR_RESET() _CL_LOG_COLOR_SET(CL_LOG_LEVEL_COUNT)
 #elif defined _WIN32 || defined WIN32
 #define _CL_LOG_COLOR_SET(lvl) /* color not supported yet on windows */
@@ -97,7 +97,6 @@ typedef struct _CL_GlobalInfo
 	CL_TimeInfo time;
 	const char *color[CL_LOG_LEVEL_COUNT + 1];
 	const char *log_level_names[CL_LOG_LEVEL_COUNT];
-	CL_Logger default_logger;
 	const char *default_pattern;
 } CL_GlobalInfo;
 

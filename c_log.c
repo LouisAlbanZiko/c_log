@@ -1,5 +1,7 @@
 #include "internal.h"
 
+#ifdef __unix__
+
 CL_GlobalInfo g_cl_info =
 	{
 		.color = {
@@ -9,7 +11,41 @@ CL_GlobalInfo g_cl_info =
 			"\e[38;5;40m",
 			"\e[38;5;248m",
 			"\e[0m"},
-		.log_level_names = { "FATAL", "ERROR", "WARN", "INFO", "TRACE"}};
+		.log_level_names = { "FATAL", "ERROR", "WARN", "INFO", "TRACE"},
+		.default_pattern = CL_DEFAULT_PATTERN 
+	};
+
+#elif defined _WIN32 || defined WIN32
+
+CL_GlobalInfo g_cl_info =
+{
+	.color = {
+		WINDOWS_MAGENTA,
+		WINDOWS_RED,
+		WINDOWS_YELLOW,
+		WINDOWS_GREEN,
+		WINDOWS_LIGHTGRAY,
+		WINDOWS_LIGHTGRAY
+	},
+	.log_level_names = { "FATAL", "ERROR", "WARN", "INFO", "TRACE"},
+	.default_pattern = CL_DEFAULT_PATTERN
+};
+
+void textcolor(int color)
+{
+	static int __BACKGROUND;
+
+	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
+
+
+	GetConsoleScreenBufferInfo(h, &csbiInfo);
+
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
+		color + (__BACKGROUND << 4));
+}
+
+#endif
 
 void _cl_logger_log(CL_Logger *logger, uint32_t lvl, const char *file, uint32_t line, const char *format, ...)
 {
@@ -96,7 +132,7 @@ CL_Logger *_cl_logger_create(uint16_t ouput_count, const char *name, const char 
 
 	// compile pattern
 	{
-		uint32_t pattern_length = strlen(pattern);
+		uint64_t pattern_length = strlen(pattern);
 		const char *segment_start = pattern;
 		for (uint32_t pattern_index = 0; pattern_index < pattern_length; pattern_index++)
 		{
@@ -105,13 +141,24 @@ CL_Logger *_cl_logger_create(uint16_t ouput_count, const char *name, const char 
 				if (logger->pattern.segment_count_c + 2 >= logger->pattern.segment_count_m)
 				{
 					logger->pattern.segment_count_m *= 2;
-					logger->pattern.segment_types = realloc(logger->pattern.segment_types, sizeof(*logger->pattern.segment_types) * logger->pattern.segment_count_m);
-					logger->pattern.segment_values = realloc(logger->pattern.segment_values, sizeof(*logger->pattern.segment_values) * logger->pattern.segment_count_m);
+					void *types_ptr = realloc(logger->pattern.segment_types, sizeof(*logger->pattern.segment_types) * logger->pattern.segment_count_m);
+					void *values_ptr = realloc(logger->pattern.segment_values, sizeof(*logger->pattern.segment_values) * logger->pattern.segment_count_m);
+
+					if (logger->pattern.segment_types == NULL || logger->pattern.segment_values)
+					{
+						fprintf(stderr, "Couldn't realloc memory for pattern segments.\n");
+					}
+					else
+					{
+						logger->pattern.segment_types = types_ptr;
+						logger->pattern.segment_values = values_ptr;
+					}
+
 				}
 				// push string
 				{
 					const char *segment_end = pattern + pattern_index;
-					uint32_t segment_length = segment_end - segment_start;
+					uint64_t segment_length = segment_end - segment_start;
 					if (segment_length != 0)
 					{
 						char *string = malloc(sizeof(*string) * (segment_length + 1));
@@ -169,14 +216,24 @@ CL_Logger *_cl_logger_create(uint16_t ouput_count, const char *name, const char 
 			}
 		}
 		const char *segment_end = pattern + pattern_length + 1;
-		uint32_t segment_length = segment_end - segment_start;
+		uint64_t segment_length = segment_end - segment_start;
 		if (segment_length != 0)
 		{
 			if (logger->pattern.segment_count_c + 1 >= logger->pattern.segment_count_m)
 			{
 				logger->pattern.segment_count_m *= 2;
-				logger->pattern.segment_types = realloc(logger->pattern.segment_types, sizeof(*logger->pattern.segment_types) * logger->pattern.segment_count_m);
-				logger->pattern.segment_values = realloc(logger->pattern.segment_values, sizeof(*logger->pattern.segment_values) * logger->pattern.segment_count_m);
+				void* types_ptr = realloc(logger->pattern.segment_types, sizeof(*logger->pattern.segment_types) * logger->pattern.segment_count_m);
+				void* values_ptr = realloc(logger->pattern.segment_values, sizeof(*logger->pattern.segment_values) * logger->pattern.segment_count_m);
+
+				if (logger->pattern.segment_types == NULL || logger->pattern.segment_values)
+				{
+					fprintf(stderr, "Couldn't realloc memory for pattern segments.\n");
+				}
+				else
+				{
+					logger->pattern.segment_types = types_ptr;
+					logger->pattern.segment_values = values_ptr;
+				}
 			}
 			char *string = malloc(sizeof(*string) * (segment_length + 1));
 			for (uint32_t string_index = 0; string_index < segment_length; string_index++)

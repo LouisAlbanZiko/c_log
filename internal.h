@@ -49,8 +49,29 @@ typedef struct _CL_TimeInfo
 #define _CL_LOG_COLOR_SET(lvl) fprintf(stdout, "%s", g_cl_info.color[lvl])
 #define _CL_LOG_COLOR_RESET() _CL_LOG_COLOR_SET(CL_LOG_LEVEL_COUNT)
 #elif defined _WIN32 || defined WIN32
-#define _CL_LOG_COLOR_SET(lvl) /* color not supported yet on windows */
-#define _CL_LOG_COLOR_RESET()
+
+#define WINDOWS_BLACK	0
+#define WINDOWS_BLUE	1
+#define WINDOWS_GREEN	2
+#define WINDOWS_CYAN	3
+#define WINDOWS_RED	4
+#define WINDOWS_MAGENTA	5
+#define WINDOWS_BROWN	6
+#define WINDOWS_LIGHTGRAY	7
+#define WINDOWS_DARKGRAY	8
+#define WINDOWS_LIGHTBLUE	9
+#define WINDOWS_LIGHTGREEN	10
+#define WINDOWS_LIGHTCYAN	11
+#define WINDOWS_LIGHTRED	12
+#define WINDOWS_LIGHTMAGENTA	13
+#define WINDOWS_YELLOW	14
+#define WINDOWS_WHITE	15
+
+void textcolor(int color);
+
+#define _CL_LOG_COLOR_SET(lvl) textcolor(g_cl_info.color[lvl]);
+#define _CL_LOG_COLOR_RESET()  textcolor(g_cl_info.color[CL_LOG_LEVEL_COUNT]);
+
 #endif
 
 // --- --- //
@@ -92,6 +113,8 @@ typedef struct _CL_Logger
 	CL_Pattern pattern;
 } CL_Logger;
 
+#ifdef __unix__
+
 typedef struct _CL_GlobalInfo
 {
 	CL_TimeInfo time;
@@ -99,5 +122,17 @@ typedef struct _CL_GlobalInfo
 	const char *log_level_names[CL_LOG_LEVEL_COUNT];
 	const char *default_pattern;
 } CL_GlobalInfo;
+
+#elif defined _WIN32 || defined WIN32
+
+typedef struct _CL_GlobalInfo
+{
+	CL_TimeInfo time;
+	uint32_t color[CL_LOG_LEVEL_COUNT + 1];
+	const char* log_level_names[CL_LOG_LEVEL_COUNT];
+	const char* default_pattern;
+} CL_GlobalInfo;
+
+#endif
 
 #endif

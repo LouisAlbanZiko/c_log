@@ -3,5 +3,5 @@ project "c_log"
 	kind "StaticLib"
 	language "C"
 	
-	files { "**.c" }
+	files { "**.c", "**.h" }
 	includedirs { "_vendor", "." }

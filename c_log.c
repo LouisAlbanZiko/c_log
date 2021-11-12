@@ -2,7 +2,7 @@
 
 #ifdef __unix__
 
-CL_GlobalInfo g_cl_info =
+const CL_GlobalInfo g_cl_info =
 	{
 		.color = {
 			"\e[38;5;54m",
@@ -11,13 +11,12 @@ CL_GlobalInfo g_cl_info =
 			"\e[38;5;40m",
 			"\e[38;5;248m",
 			"\e[0m"},
-		.log_level_names = { "FATAL", "ERROR", "WARN", "INFO", "TRACE"},
-		.default_pattern = CL_DEFAULT_PATTERN 
+		.log_level_names = { "FATAL", "ERROR", "WARN", "INFO", "TRACE"}
 	};
 
 #elif defined _WIN32 || defined WIN32
 
-CL_GlobalInfo g_cl_info =
+const CL_GlobalInfo g_cl_info =
 {
 	.color = {
 		WINDOWS_MAGENTA,
@@ -27,8 +26,7 @@ CL_GlobalInfo g_cl_info =
 		WINDOWS_LIGHTGRAY,
 		WINDOWS_LIGHTGRAY
 	},
-	.log_level_names = { "FATAL", "ERROR", "WARN", "INFO", "TRACE"},
-	.default_pattern = CL_DEFAULT_PATTERN
+	.log_level_names = { "FATAL", "ERROR", "WARN", "INFO", "TRACE"}
 };
 
 void textcolor(int color)
@@ -53,7 +51,8 @@ void _cl_logger_log(CL_Logger *logger, uint32_t lvl, const char *file, uint32_t 
 	{
 		va_list va_args;
 		va_start(va_args, format);
-		_CL_LOG_UPDATE_TIME();
+		CL_TimeInfo time;
+		_CL_LOG_UPDATE_TIME(time);
 		for (uint32_t i = 0; i < logger->output_count_c; i++)
 		{
 			uint32_t color_set = 0;
@@ -71,7 +70,7 @@ void _cl_logger_log(CL_Logger *logger, uint32_t lvl, const char *file, uint32_t 
 					fprintf(logger->outputs[i], "%s", g_cl_info.log_level_names[lvl]);
 					break;
 				case CL_SEGMENT_TYPE_TIME:
-					fprintf(logger->outputs[i], "%s", g_cl_info.time.string);
+					fprintf(logger->outputs[i], "%s", time.string);
 					break;
 				case CL_SEGMENT_TYPE_MESSAGE:
 					vfprintf(logger->outputs[i], format, va_args);
@@ -80,7 +79,7 @@ void _cl_logger_log(CL_Logger *logger, uint32_t lvl, const char *file, uint32_t 
 					fprintf(logger->outputs[i], "%s", logger->name);
 					break;
 				case CL_SEGMENT_TYPE_COLOR:
-					if (logger->output_colors)
+					if (logger->outputs[i] == stdout)
 					{
 						if (color_set)
 						{
@@ -114,14 +113,13 @@ CL_Logger *_cl_logger_create(uint16_t ouput_count, const char *name, const char 
 		ouput_count = 2;
 	logger->output_count_m = ouput_count;
 	logger->outputs = malloc(sizeof(*logger->outputs) * ouput_count);
-	logger->output_colors = malloc(sizeof(*logger->output_colors) * ouput_count);
 	if (name == NULL)
 		name = "UNNAMED";
 	logger->name = name;
 
 	if (pattern == NULL)
 	{
-		pattern = g_cl_info.default_pattern;
+		pattern = CL_DEFAULT_PATTERN;
 	}
 
 	logger->pattern.string = pattern;
@@ -252,16 +250,14 @@ CL_Logger *_cl_logger_create(uint16_t ouput_count, const char *name, const char 
 	return logger;
 }
 
-void _cl_logger_output_add(CL_Logger *logger, FILE *file, uint8_t color_output)
+void _cl_logger_output_add(CL_Logger *logger, FILE *file)
 {
 	if (logger->output_count_c == logger->output_count_m)
 	{
 		logger->output_count_m *= 2;
 		logger->outputs = realloc(logger->outputs, sizeof(*logger->outputs) * logger->output_count_m);
-		logger->output_colors = realloc(logger->output_colors, sizeof(*logger->output_colors) * logger->output_count_m);
 	}
 	logger->outputs[logger->output_count_c] = file;
-	logger->output_colors[logger->output_count_c] = color_output;
 	logger->output_count_c++;
 }
 
@@ -275,7 +271,6 @@ void _cl_logger_destroy(CL_Logger *logger)
 	free(logger->pattern.segment_values);
 	free(logger->pattern.segment_types);
 	free(logger->outputs);
-	free(logger->output_colors);
 	free(logger);
 }
 

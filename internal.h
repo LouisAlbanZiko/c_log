@@ -6,7 +6,7 @@
 typedef struct _CL_TimeInfo CL_TimeInfo;
 typedef struct _CL_GlobalInfo CL_GlobalInfo;
 
-extern CL_GlobalInfo g_cl_info;
+extern const CL_GlobalInfo g_cl_info;
 
 // --- Time --- //
 
@@ -36,9 +36,9 @@ typedef struct _CL_TimeInfo
 	char string[10];
 } CL_TimeInfo;
 
-#define _CL_LOG_UPDATE_TIME()            \
-	GetSystemTime(&g_cl_info.time.info); \
-	GetTimeFormatA(LOCALE_USER_DEFAULT, TIME_FORCE24HOURFORMAT, &g_cl_info.time.info, NULL, g_cl_info.time.string, sizeof(g_cl_info.time.string));
+#define _CL_LOG_UPDATE_TIME(time)            \
+	GetSystemTime(&time.info); \
+	GetTimeFormatA(LOCALE_USER_DEFAULT, TIME_FORCE24HOURFORMAT, &time.info, NULL, time.string, sizeof(time.string));
 
 #endif
 // --- --- //
@@ -107,7 +107,6 @@ typedef struct _CL_Logger
 	uint32_t log_level;
 	uint16_t output_count_c;
 	uint16_t output_count_m;
-	uint8_t *output_colors;
 	FILE **outputs;
 	const char *name;
 	CL_Pattern pattern;
@@ -117,20 +116,16 @@ typedef struct _CL_Logger
 
 typedef struct _CL_GlobalInfo
 {
-	CL_TimeInfo time;
 	const char *color[CL_LOG_LEVEL_COUNT + 1];
 	const char *log_level_names[CL_LOG_LEVEL_COUNT];
-	const char *default_pattern;
 } CL_GlobalInfo;
 
 #elif defined _WIN32 || defined WIN32
 
 typedef struct _CL_GlobalInfo
 {
-	CL_TimeInfo time;
 	uint32_t color[CL_LOG_LEVEL_COUNT + 1];
 	const char* log_level_names[CL_LOG_LEVEL_COUNT];
-	const char* default_pattern;
 } CL_GlobalInfo;
 
 #endif

@@ -24,12 +24,6 @@ enum CL_LogLevel
 	CL_LOG_LEVEL_COUNT
 };
 
-enum CL_ColorEnabled
-{
-	CL_COLOR_DISABLED = 0,
-	CL_COLOR_ENABLED
-};
-
 #ifdef CL_LOG_DISABLED
 
 #define CL_LOG(logger, level, ...)
@@ -58,13 +52,16 @@ enum CL_ColorEnabled
 #define CL_LOG_FATAL(logger, ...) CL_LOG(logger, CL_LOG_LEVEL_FATAL, __VA_ARGS__); exit(EXIT_FAILURE)
 
 #define CL_LOGGER_CREATE(output_count, name, pattern) _cl_logger_create(output_count, name, pattern)
-#define CL_LOGGER_OUTPUT_ADD(logger, file, colors_enabled) _cl_logger_output_add(logger, file, colors_enabled)
+#define CL_LOGGER_OUTPUT_ADD(logger, file) _cl_logger_output_add(logger, file)
 #define CL_LOGGER_DESTROY(logger) _cl_logger_destroy(logger)
+
+#define CL_INIT()
+#define CL_TERMINATE()
 
 #endif
 
 CL_Logger *_cl_logger_create(uint16_t ouput_count, const char *name, const char *pattern);
-void _cl_logger_output_add(CL_Logger *logger, FILE *file, uint8_t color_output);
+void _cl_logger_output_add(CL_Logger *logger, FILE *file);
 void _cl_logger_destroy(CL_Logger *logger);
 
 void _cl_logger_log(CL_Logger *logger, uint32_t lvl, const char *file, uint32_t line,  const char *format, ...);

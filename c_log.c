@@ -261,6 +261,16 @@ void _cl_logger_output_add(CL_Logger *logger, FILE *file)
 	logger->output_count_c++;
 }
 
+void _cl_logger_lvl_set(CL_Logger *logger, CL_LogLevel lvl)
+{
+	logger->log_level = lvl;
+}
+
+CL_LogLevel _cl_logger_lvl_get(CL_Logger *logger)
+{
+	return logger->log_level;
+}
+
 void _cl_logger_destroy(CL_Logger *logger)
 {
 	for (uint32_t i = 0; i < logger->pattern.segment_count_c; i++)

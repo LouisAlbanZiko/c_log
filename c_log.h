@@ -14,7 +14,7 @@ typedef struct _CL_Logger CL_Logger;
 	#define CL_DEFAULT_PATTERN "[%T] (%N) %C%V\t%F, %L %M%C"
 #endif
 
-enum CL_LogLevel
+typedef enum CL_LogLevel
 {
 	CL_LOG_LEVEL_FATAL = 0,
 	CL_LOG_LEVEL_ERROR,
@@ -22,7 +22,7 @@ enum CL_LogLevel
 	CL_LOG_LEVEL_INFO,
 	CL_LOG_LEVEL_TRACE,
 	CL_LOG_LEVEL_COUNT
-};
+} CL_LogLevel;
 
 #ifdef CL_LOG_DISABLED
 
@@ -36,6 +36,8 @@ enum CL_LogLevel
 
 #define CL_LOGGER_CREATE(output_count, name) NULL
 #define CL_LOGGER_OUTPUT_ADD(logger, file, colors_enabled)
+#define CL_LOGGER_LVL_SET(logger, lvl)
+#define CL_LOGGER_LVL_GET(logger)
 #define CL_LOGGER_DESTROY(logger)
 
 #define CL_INIT()
@@ -53,6 +55,8 @@ enum CL_LogLevel
 
 #define CL_LOGGER_CREATE(output_count, name, pattern) _cl_logger_create(output_count, name, pattern)
 #define CL_LOGGER_OUTPUT_ADD(logger, file) _cl_logger_output_add(logger, file)
+#define CL_LOGGER_LVL_SET(logger, lvl) _cl_logger_lvl_set(logger, lvl)
+#define CL_LOGGER_LVL_GET(logger) _cl_logger_lvl_get(logger)
 #define CL_LOGGER_DESTROY(logger) _cl_logger_destroy(logger)
 
 #define CL_INIT()
@@ -62,6 +66,8 @@ enum CL_LogLevel
 
 CL_Logger *_cl_logger_create(uint16_t ouput_count, const char *name, const char *pattern);
 void _cl_logger_output_add(CL_Logger *logger, FILE *file);
+void _cl_logger_lvl_set(CL_Logger *logger, CL_LogLevel lvl);
+CL_LogLevel _cl_logger_lvl_get(CL_Logger *logger);
 void _cl_logger_destroy(CL_Logger *logger);
 
 void _cl_logger_log(CL_Logger *logger, uint32_t lvl, const char *file, uint32_t line,  const char *format, ...);

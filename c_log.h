@@ -40,9 +40,6 @@ typedef enum CL_LogLevel
 #define CL_LOGGER_LVL_GET(logger)
 #define CL_LOGGER_DESTROY(logger)
 
-#define CL_INIT()
-#define CL_TERMINATE()
-
 #else
 
 #define CL_LOG(logger, level, ...) _cl_logger_log(logger, level, __FILE__, __LINE__, __VA_ARGS__)
@@ -58,9 +55,6 @@ typedef enum CL_LogLevel
 #define CL_LOGGER_LVL_SET(logger, lvl) _cl_logger_lvl_set(logger, lvl)
 #define CL_LOGGER_LVL_GET(logger) _cl_logger_lvl_get(logger)
 #define CL_LOGGER_DESTROY(logger) _cl_logger_destroy(logger)
-
-#define CL_INIT()
-#define CL_TERMINATE()
 
 #endif
 

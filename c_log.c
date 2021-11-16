@@ -142,7 +142,7 @@ CL_Logger *_cl_logger_create(uint16_t ouput_count, const char *name, const char 
 					void *types_ptr = realloc(logger->pattern.segment_types, sizeof(*logger->pattern.segment_types) * logger->pattern.segment_count_m);
 					void *values_ptr = realloc(logger->pattern.segment_values, sizeof(*logger->pattern.segment_values) * logger->pattern.segment_count_m);
 
-					if (logger->pattern.segment_types == NULL || logger->pattern.segment_values)
+					if (types_ptr == NULL || values_ptr == NULL)
 					{
 						fprintf(stderr, "Couldn't realloc memory for pattern segments.\n");
 					}

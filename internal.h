@@ -21,10 +21,12 @@ typedef struct _CL_TimeInfo
 } CL_TimeInfo;
 
 #define _CL_LOG_UPDATE_TIME()                             \
-	gettimeofday(&g_cl_info.time.tv, NULL);               \
-	g_cl_info.time.t = g_cl_info.time.tv.tv_sec;          \
-	localtime_r(&g_cl_info.time.t, &g_cl_info.time.info); \
-	strftime(g_cl_info.time.string, sizeof(g_cl_info.time.string), "%H:%M:%S", &g_cl_info.time.info);
+	{\
+		gettimeofday(&g_cl_info.time.tv, NULL);               \
+		g_cl_info.time.t = g_cl_info.time.tv.tv_sec;          \
+		localtime_r(&g_cl_info.time.t, &g_cl_info.time.info); \
+		strftime(g_cl_info.time.string, sizeof(g_cl_info.time.string), "%H:%M:%S", &g_cl_info.time.info);\
+	}
 
 #elif defined _WIN32 || defined WIN32
 #include <Windows.h>
@@ -36,9 +38,12 @@ typedef struct _CL_TimeInfo
 	char string[10];
 } CL_TimeInfo;
 
-#define _CL_LOG_UPDATE_TIME(time)            \
-	GetSystemTime(&time.info); \
-	GetTimeFormatA(LOCALE_USER_DEFAULT, TIME_FORCE24HOURFORMAT, &time.info, NULL, time.string, sizeof(time.string));
+#define _CL_LOG_UPDATE_TIME(time) \
+	{\
+		GetSystemTime(&time.info); \
+		GetTimeFormatA(LOCALE_USER_DEFAULT, TIME_FORCE24HOURFORMAT, &time.info, NULL, time.string, sizeof(time.string));\
+		time.string[9] = '\0';\
+	}
 
 #endif
 // --- --- //

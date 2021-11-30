@@ -11,7 +11,7 @@
 typedef struct _CL_Logger CL_Logger;
 
 #ifndef CL_DEFAULT_PATTERN
-	#define CL_DEFAULT_PATTERN "[%T] (%N) %C%V\t%F, %L %M%C"
+#define CL_DEFAULT_PATTERN "[%T] (%N) %C%V\t%F, %L %M%C"
 #endif
 
 typedef enum CL_LogLevel
@@ -64,6 +64,6 @@ void _cl_logger_lvl_set(CL_Logger *logger, CL_LogLevel lvl);
 CL_LogLevel _cl_logger_lvl_get(CL_Logger *logger);
 void _cl_logger_destroy(CL_Logger *logger);
 
-void _cl_logger_log(CL_Logger *logger, uint32_t lvl, const char *file, uint32_t line,  const char *format, ...);
+void _cl_logger_log(CL_Logger *logger, uint32_t lvl, const char *file, uint32_t line, const char *format, ...);
 
 #endif

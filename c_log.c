@@ -3,16 +3,16 @@
 #ifdef __unix__
 
 const CL_GlobalInfo g_cl_info =
-	{
-		.color = {
-			"\e[38;5;54m",
-			"\e[38;5;160m",
-			"\e[38;5;226m",
-			"\e[38;5;40m",
-			"\e[38;5;248m",
-			"\e[0m"},
-		.log_level_names = { "FATAL", "ERROR", "WARN", "INFO", "TRACE"}
-	};
+{
+	.color = {
+		"\e[38;5;54m",
+		"\e[38;5;160m",
+		"\e[38;5;226m",
+		"\e[38;5;40m",
+		"\e[38;5;248m",
+		"\e[0m"},
+	.log_level_names = { "FATAL", "ERROR", "WARN", "INFO", "TRACE"}
+};
 
 #elif defined _WIN32 || defined WIN32
 
@@ -220,8 +220,8 @@ CL_Logger *_cl_logger_create(uint16_t ouput_count, const char *name, const char 
 			if (logger->pattern.segment_count_c + 1 >= logger->pattern.segment_count_m)
 			{
 				logger->pattern.segment_count_m *= 2;
-				void* types_ptr = realloc(logger->pattern.segment_types, sizeof(*logger->pattern.segment_types) * logger->pattern.segment_count_m);
-				void* values_ptr = realloc(logger->pattern.segment_values, sizeof(*logger->pattern.segment_values) * logger->pattern.segment_count_m);
+				void *types_ptr = realloc(logger->pattern.segment_types, sizeof(*logger->pattern.segment_types) * logger->pattern.segment_count_m);
+				void *values_ptr = realloc(logger->pattern.segment_values, sizeof(*logger->pattern.segment_values) * logger->pattern.segment_count_m);
 
 				if (logger->pattern.segment_types == NULL || logger->pattern.segment_values)
 				{

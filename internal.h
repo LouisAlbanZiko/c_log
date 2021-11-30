@@ -130,7 +130,7 @@ typedef struct _CL_GlobalInfo
 typedef struct _CL_GlobalInfo
 {
 	uint32_t color[CL_LOG_LEVEL_COUNT + 1];
-	const char* log_level_names[CL_LOG_LEVEL_COUNT];
+	const char *log_level_names[CL_LOG_LEVEL_COUNT];
 } CL_GlobalInfo;
 
 #endif

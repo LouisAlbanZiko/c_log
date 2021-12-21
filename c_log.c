@@ -79,7 +79,7 @@ void _cl_logger_log(CL_Logger *logger, uint32_t lvl, const char *file, uint32_t 
 					fprintf(logger->outputs[i], "%s", logger->name);
 					break;
 				case CL_SEGMENT_TYPE_COLOR:
-					if (logger->outputs[i] == stdout)
+					if (logger->outputs[i] == stdout || logger->outputs[i] == stderr)
 					{
 						if (color_set)
 						{

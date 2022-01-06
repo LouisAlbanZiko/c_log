@@ -45,6 +45,20 @@ void textcolor(int color)
 
 #endif
 
+void _cl_logger_log_message(CL_Logger *logger, uint32_t lvl, const char *format, ...)
+{
+	if (logger->log_level >= lvl)
+	{
+		va_list va_args;
+		va_start(va_args, format);
+		for (uint32_t i = 0; i < logger->output_count_c; i++)
+		{
+			vfprintf(logger->outputs[i], format, va_args);
+		}
+		va_end(va_args);
+	}
+}
+
 void _cl_logger_log(CL_Logger *logger, uint32_t lvl, const char *file, uint32_t line, const char *format, ...)
 {
 	if (logger->log_level >= lvl)

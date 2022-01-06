@@ -26,6 +26,8 @@ typedef enum CL_LogLevel
 
 #ifdef CL_LOG_DISABLED
 
+#define CL_LOG_MESSAGE(logger, level, ...)
+
 #define CL_LOG(logger, level, ...)
 
 #define CL_LOG_TRACE(logger, ...)
@@ -41,6 +43,8 @@ typedef enum CL_LogLevel
 #define CL_LOGGER_DESTROY(logger)
 
 #else
+
+#define CL_LOG_MESSAGE(logger, level, ...) _cl_logger_log_message(logger, level, __VA_ARGS__)
 
 #define CL_LOG(logger, level, ...) _cl_logger_log(logger, level, __FILE__, __LINE__, __VA_ARGS__)
 
@@ -64,6 +68,7 @@ void _cl_logger_lvl_set(CL_Logger *logger, CL_LogLevel lvl);
 CL_LogLevel _cl_logger_lvl_get(CL_Logger *logger);
 void _cl_logger_destroy(CL_Logger *logger);
 
+void _cl_logger_log_message(CL_Logger *logger, uint32_t lvl, const char *format, ...);
 void _cl_logger_log(CL_Logger *logger, uint32_t lvl, const char *file, uint32_t line, const char *format, ...);
 
 #endif

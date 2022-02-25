@@ -45,20 +45,6 @@ void textcolor(int color)
 
 #endif
 
-void _cl_logger_log_message(CL_Logger *logger, uint32_t lvl, const char *format, ...)
-{
-	if (logger->log_level >= lvl)
-	{
-		va_list va_args;
-		va_start(va_args, format);
-		for (uint32_t i = 0; i < logger->output_count_c; i++)
-		{
-			vfprintf(logger->outputs[i], format, va_args);
-		}
-		va_end(va_args);
-	}
-}
-
 void _cl_logger_log(CL_Logger *logger, uint32_t lvl, const char *file, uint32_t line, const char *format, ...)
 {
 	if (logger->log_level >= lvl)
@@ -118,15 +104,27 @@ void _cl_logger_log(CL_Logger *logger, uint32_t lvl, const char *file, uint32_t 
 	}
 }
 
-CL_Logger *_cl_logger_create(uint16_t ouput_count, const char *name, const char *pattern)
+CL_Logger *_cl_logger_create(const char *name, const char *pattern, uint64_t count, ...)
 {
 	CL_Logger *logger = (CL_Logger *)malloc(sizeof(*logger));
 	logger->log_level = CL_LOG_LEVEL_TRACE;
 	logger->output_count_c = 0;
-	if (ouput_count == 0)
-		ouput_count = 2;
-	logger->output_count_m = ouput_count;
-	logger->outputs = malloc(sizeof(*logger->outputs) * ouput_count);
+	if (count == 0)
+		count = 2;
+	logger->output_count_m = count;
+	logger->outputs = malloc(sizeof(*logger->outputs) * count);
+
+	va_list args;
+	va_start(args, count);
+
+	for (uint64_t i = 0; i < count; i++)
+	{
+		FILE *output = va_arg(args, FILE *);
+		_cl_logger_output_add(logger, output);
+	}
+	
+	va_end(args);
+
 	if (name == NULL)
 		name = "UNNAMED";
 	logger->name = name;

@@ -47,7 +47,7 @@ typedef enum CL_LogLevel
 #define CL_LOG_INFO(logger, ...) CL_LOG(logger, CL_LOG_LEVEL_INFO, __VA_ARGS__)
 #define CL_LOG_WARN(logger, ...) CL_LOG(logger, CL_LOG_LEVEL_WARN, __VA_ARGS__)
 #define CL_LOG_ERROR(logger, ...) CL_LOG(logger, CL_LOG_LEVEL_ERROR, __VA_ARGS__)
-#define CL_LOG_FATAL(logger, ...) { CL_LOG(logger, CL_LOG_LEVEL_FATAL, __VA_ARGS__); exit(EXIT_FAILURE); }
+#define CL_LOG_FATAL(logger, ...) CL_LOG(logger, CL_LOG_LEVEL_FATAL, __VA_ARGS__)
 
 #define CL_LOGGER_CREATE(name, pattern, ...) _cl_logger_create(name, pattern, __VA_ARGS__)
 #define CL_LOGGER_LVL_SET(logger, lvl) _cl_logger_lvl_set(logger, lvl)

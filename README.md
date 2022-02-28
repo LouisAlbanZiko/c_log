@@ -6,6 +6,8 @@ A small library for logging in the C programming language. Features include:
 - a custom output pattern can be created for each logger.
 - colors for each level of logging.
 
+Documentation can be found [here](https://petheprogrammer.github.io/c_log).
+
 #### Setup
 
 ###### With Premake
@@ -20,6 +22,3 @@ For a full setup of premake go to the premake [github page](https://github.com/p
 
 Copy the files `c_log.c`, `c_log.h` and `internal.h` into your project directory and compile your project with these files.
 
-#### Documentation
-
-Check the wiki page. (File paths to be updated.)

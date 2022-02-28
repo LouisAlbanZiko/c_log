@@ -26,8 +26,6 @@ typedef enum CL_LogLevel
 
 #ifdef CL_LOG_DISABLED
 
-#define CL_LOG_MESSAGE(logger, level, ...)
-
 #define CL_LOG(logger, level, ...)
 
 #define CL_LOG_TRACE(logger, ...)

@@ -1,0 +1,6 @@
+[book]
+authors = ["peTheProgrammer"]
+language = "en"
+multilingual = false
+src = "src"
+title = "docs.c_log"

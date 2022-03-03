@@ -110,8 +110,8 @@ typedef struct _CL_Pattern
 typedef struct _CL_Logger
 {
 	uint32_t log_level;
-	uint16_t output_count_c;
-	uint16_t output_count_m;
+	uint64_t output_count_c;
+	uint64_t output_count_m;
 	FILE **outputs;
 	const char *name;
 	CL_Pattern pattern;

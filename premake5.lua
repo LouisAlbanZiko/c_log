@@ -4,4 +4,8 @@ project "c_log"
 	language "C"
 	
 	files { "**.c", "**.h" }
-	includedirs { "_vendor", "." }
+	includedirs { "../_vendor", ".", ".." }
+
+	filter "system:linux"
+		links { "m" }
+		buildoptions "-g"
